@@ -27,4 +27,4 @@ $routes = ['/' => '/index.php',
 
 require_once __DIR__.'/vendor/mvc/Router.php';
 use Mvc\Router;
-Router::route($routes);
+Router::route($routes); 
