@@ -1,18 +1,13 @@
 <?php namespace MVC;
 
 class Router{
-    public static function route($routes){  
-        $uri = $_SERVER['REQUEST_URI'];
-        
+    protected static $uri;
+    protected static $queryStr;
+    public static function route($routes): void { 
+        self::setUri();
+        self::routeFile();
         foreach($routes as $key => $val){ 
-            if(stristr($uri, '?')){
-                $uriparts = self::getRequest($uri);
-                
-                if(ROOT_DIR.$key == $uriparts[0] || ROOT_DIR.$key.'/' == $uriparts[0]){
-                    $uri = $uriparts[0]; 
-                }                
-            }
-            if(ROOT_DIR.$key == $uri || ROOT_DIR.$key.'/' == $uri){
+            if(ROOT_DIR.$key == self::$uri || ROOT_DIR.$key.'/' == self::$uri){
                 if(is_array($val)){ 
                     require_once(APP_PATH.$val['page']);
                     $controller = new $val['controller']();
@@ -24,18 +19,40 @@ class Router{
                 }else{
                     require_once(APP_PATH.$val);
                 }
-                return;
+                exit;
             }
         }
-        require_once(APP_PATH.'/401.html'); return;
+        self::page401();
     }
     
-    public static function getRequest($uri){
+    protected static function setUri(): void {
+        self::$uri = $_SERVER['REQUEST_URI'];
+        if(stristr(self::$uri, '?')){
+            self::getRequest();
+        }
+        return;
+    }
+    
+    private static function getRequest(): void { 
         foreach($_GET as $key=>$val){
             $_GET[$key]=strip_tags($val);
         }
-        return $parts = explode('?', $uri);
-        
+        $parts = explode('?', self::$uri);
+        self::$queryStr = $parts[1];  
+        self::$uri = $parts[0];
+        return;
+    }
+    
+    protected static function routeFile(): void {
+        if(!is_dir(APP_PATH.str_replace(ROOT_DIR, '', self::$uri)) && file_exists(APP_PATH.str_replace(ROOT_DIR, '', self::$uri))){
+            require_once(APP_PATH.str_replace(ROOT_DIR, '', self::$uri));
+            exit;
+        }
+        return;
+    }
+    
+    protected static function page401(): void { 
+        require_once(APP_PATH.'/401.html'); 
         exit;
     }
 }
