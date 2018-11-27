@@ -7,6 +7,7 @@ class Router{
         foreach($routes as $key => $val){ 
             if(stristr($uri, '?')){
                 $uriparts = self::getRequest($uri);
+                
                 if(ROOT_DIR.$key == $uriparts[0] || ROOT_DIR.$key.'/' == $uriparts[0]){
                     $uri = $uriparts[0]; 
                 }                

@@ -3,6 +3,7 @@
 
 use App\Models\User;
 
+
 $user = new User();
 $user->setFirstName('Nick');
 $fname = $user->getFirstName();
