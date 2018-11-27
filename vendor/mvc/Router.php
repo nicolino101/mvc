@@ -25,7 +25,7 @@ class Router{
         self::page401();
     }
     
-    protected static function setUri(): void {
+    protected static function setUri() {
         self::$uri = $_SERVER['REQUEST_URI'];
         if(stristr(self::$uri, '?')){
             self::getRequest();
@@ -33,25 +33,25 @@ class Router{
         return;
     }
     
-    private static function getRequest(): void { 
+    private static function getRequest() { 
         foreach($_GET as $key=>$val){
             $_GET[$key]=strip_tags($val);
         }
         $parts = explode('?', self::$uri);
         self::$queryStr = $parts[1];  
         self::$uri = $parts[0];
-        return;
+        
     }
     
-    protected static function routeFile(): void {
+    protected static function routeFile() {
         if(!is_dir(APP_PATH.str_replace(ROOT_DIR, '', self::$uri)) && file_exists(APP_PATH.str_replace(ROOT_DIR, '', self::$uri))){
             require_once(APP_PATH.str_replace(ROOT_DIR, '', self::$uri));
             exit;
         }
-        return;
+        
     }
     
-    protected static function page401(): void { 
+    protected static function page401() { 
         require_once(APP_PATH.'/401.html'); 
         exit;
     }
