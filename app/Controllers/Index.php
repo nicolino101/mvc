@@ -3,11 +3,11 @@
 use App\Models\User;
 
 class Index{
-    public function __construct(){
+    public function __construct() {
         var_dump(__METHOD__); 
     }
     
-    public function index(){
+    public function index(): void {
         echo '<pre>';
         var_dump($params = $_GET);
         $user = new User();
@@ -18,7 +18,7 @@ class Index{
         var_dump($user);
     }
     
-    public function user($params){
+    public function user($params): User {
         
         $user = new User();
         $user->setFirstName($params['firstName']);
