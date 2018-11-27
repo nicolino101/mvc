@@ -1,10 +1,17 @@
 <?php
-spl_autoload_register(function ($name) {
-    //var_dump($name);
-    $p =__DIR__.'/'.str_replace("\\", "/", $name);
-    
-    require_once $p.'.php';
-});
-
-
+class Autoloader
+{
+    static public function loader($className)
+    {
+        $filename = "" . str_replace("\\", '/', $className) . ".php";
+        if (file_exists($filename)) {
+            require_once ($filename);
+            if (class_exists($className)) {
+                return TRUE;
+            }
+        }
+        return FALSE;
+    }
+}
+spl_autoload_register('Autoloader::loader');
 ?>
